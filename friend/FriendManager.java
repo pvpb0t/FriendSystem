@@ -71,7 +71,6 @@ public class FriendManager {
     public String getName(String uuid) {
         String url = "https://api.mojang.com/user/profiles/"+uuid.replace("-", "")+"/names";
         try {
-         //   @SuppressWarnings("deprecation")
             String nameJson = IOUtils.toString(new URL(url));
             JSONArray nameValue = (JSONArray) JSONValue.parseWithException(nameJson);
             String playerSlot = nameValue.get(nameValue.size()-1).toString();
@@ -86,7 +85,6 @@ public class FriendManager {
     public String getUuid(String name) {
         String url = "https://api.mojang.com/users/profiles/minecraft/"+name;
         try {
-          //  @SuppressWarnings("deprecation")
             String UUIDJson = IOUtils.toString(new URL(url));
             if(UUIDJson.isEmpty()) return "invalid name";
             JSONObject UUIDObject = (JSONObject) JSONValue.parseWithException(UUIDJson);
