@@ -8,6 +8,7 @@ import org.json.simple.JSONValue;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -20,26 +21,8 @@ public class FriendManager {
             final FriendObj friendObj = new FriendObj(c);
             friends.add(friendObj);
         }else {
-            try {
-                new Thread(() -> {
-                    final String url = "https://api.mojang.com/users/profiles/minecraft/" + c;
-                    try {
-                        final String json = IOUtils.toString(new URL(url));
-                        if (json.isEmpty()) {
-                            return;
-                        }
-
-                        final JSONObject obj = (JSONObject) JSONValue.parseWithException(json);
-                        final String uuid = obj.get("id").toString();
-                        final FriendObj friendObj = new FriendObj(uuid);
-                        friends.add(friendObj);
-                    } catch (org.json.simple.parser.ParseException | IOException e) {
-                        e.printStackTrace();
-                    }
-                }).start();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            final FriendObj friendObj = new FriendObj(this.getUuid(c));
+            friends.add(friendObj);
         }
     }
 
