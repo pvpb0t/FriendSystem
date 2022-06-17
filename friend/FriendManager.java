@@ -17,13 +17,15 @@ public class FriendManager {
     private ArrayList<FriendObj> friends = new ArrayList<>();
 
     public void addFriend(String c, Boolean isUUID){
+        FriendObj friendObj;
         if(isUUID){
-            final FriendObj friendObj = new FriendObj(c);
-            friends.add(friendObj);
+            friendObj = new FriendObj(c);
+
         }else {
-            final FriendObj friendObj = new FriendObj(this.getUuid(c));
-            friends.add(friendObj);
+             friendObj = new FriendObj(this.getUuid(c));
+
         }
+        friends.add(friendObj);
     }
 
     public boolean isFriend(String c){
