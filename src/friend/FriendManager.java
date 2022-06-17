@@ -1,4 +1,4 @@
-package me.pvpb0t.callisto.api.friend;
+package me.pvpb0t.callisto.api.src.friend;
 
 import net.minecraft.entity.Entity;
 import org.apache.commons.io.IOUtils;
