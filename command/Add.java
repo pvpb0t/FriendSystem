@@ -1,4 +1,4 @@
-package me.pvpb0t.callisto.api.src.command;
+package me.pvpb0t.callisto.api.command;
 
 package me.pvpb0t.callisto.impl.command;
 

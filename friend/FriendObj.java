@@ -1,4 +1,4 @@
-package me.pvpb0t.callisto.api.src.friend;
+package me.pvpb0t.callisto.api.friend;
 
 public class FriendObj {
 

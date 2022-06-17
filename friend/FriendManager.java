@@ -1,4 +1,4 @@
-package me.pvpb0t.callisto.api.src.friend;
+package me.pvpb0t.callisto.api.friend;
 
 import net.minecraft.entity.Entity;
 import org.apache.commons.io.IOUtils;
@@ -8,7 +8,6 @@ import org.json.simple.JSONValue;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
