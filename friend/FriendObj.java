@@ -1,5 +1,8 @@
 package me.pvpb0t.callisto.api.friend;
-
+/**
+ * @Author pvpb0t
+ * @Since 7/12/2022
+ */
 public class FriendObj {
 
     private String uuid;
