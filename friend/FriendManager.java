@@ -11,7 +11,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.concurrent.CompletableFuture;
-
+/**
+ * @Author pvpb0t
+ * @Since 7/12/2022
+ */
 public class FriendManager {
 
     private ArrayList<FriendObj> friends = new ArrayList<>();
