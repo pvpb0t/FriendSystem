@@ -8,7 +8,10 @@ import org.json.simple.parser.ParseException;
 
 import java.io.*;
 import java.util.ArrayList;
-
+/**
+ * @Author pvpb0t
+ * @Since 7/12/2022
+ */
 public class FriendConfig extends Thread{
 
     static FriendManager friendManager = Callisto.getCallisto().getFriendManager();
