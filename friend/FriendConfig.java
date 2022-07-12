@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class FriendConfig extends Thread{
 
     static FriendManager friendManager = Callisto.getCallisto().getFriendManager();
-    static String path = Callisto.mainFolder + File.separator +  "friends.json";
+    static String path = Callisto.mainFolder + File.separator +  "friends.b0t";
 
     @Override
     public void run(){
@@ -25,7 +25,7 @@ public class FriendConfig extends Thread{
     public static void loadFriendsFromJSON() {
         JSONParser parser = new JSONParser();
         ArrayList<FriendObj> loadedFriends = new ArrayList<>();
-        FriendObj friend = new FriendObj();
+
         String fileName = path;
         if(new File(path).exists()) {
 
@@ -36,7 +36,7 @@ public class FriendConfig extends Thread{
 
                 JSONArray UUIDs = (JSONArray) jsonObject.get("UUID");
                 for (Object uuid : UUIDs) {
-                    friend.setUUID((String) uuid);
+                    FriendObj friend = new FriendObj((String) uuid);
                     loadedFriends.add(friend);
                 }
 
