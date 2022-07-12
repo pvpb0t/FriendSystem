@@ -8,24 +8,27 @@ import org.json.simple.JSONValue;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.concurrent.CompletableFuture;
 
 public class FriendManager {
 
     private ArrayList<FriendObj> friends = new ArrayList<>();
 
     public void addFriend(String c, Boolean isUUID){
-        FriendObj friendObj;
+        FriendObj friendObj = null;
         if(isUUID){
             friendObj = new FriendObj(c);
-
         }else {
-             friendObj = new FriendObj(this.getUuid(c));
-
+            this.getUuid(c).thenAccept(s->{
+                FriendObj fr = new FriendObj(s);
+                friends.add(fr);
+            });
         }
-        friends.add(friendObj);
+        if(friendObj!=null){
+            friends.add(friendObj);
+        }
     }
 
     public boolean isFriend(String c){
@@ -46,40 +49,56 @@ public class FriendManager {
     }
 
     public FriendObj getFriend(String c){
-            for(FriendObj friendz : friends){
-                if(c.equalsIgnoreCase(friendz.getUuid())){
-                    return friendz;
-                }
+        for(FriendObj friend : friends){
+            if(c.equalsIgnoreCase(friend.getUuid())){
+                return friend;
             }
-    return null;}
-
-    public String getName(String uuid) {
-        String url = "https://api.mojang.com/user/profiles/"+uuid.replace("-", "")+"/names";
-        try {
-            String nameJson = IOUtils.toString(new URL(url));
-            JSONArray nameValue = (JSONArray) JSONValue.parseWithException(nameJson);
-            String playerSlot = nameValue.get(nameValue.size()-1).toString();
-            JSONObject nameObject = (JSONObject) JSONValue.parseWithException(playerSlot);
-            return nameObject.get("name").toString();
-        } catch (IOException | ParseException e) {
-            e.printStackTrace();
         }
-        return "invalid name";
+        return null;
     }
 
-    public String getUuid(String name) {
-        String url = "https://api.mojang.com/users/profiles/minecraft/"+name;
-        try {
-            String UUIDJson = IOUtils.toString(new URL(url));
-            if(UUIDJson.isEmpty()) return "invalid name";
-            JSONObject UUIDObject = (JSONObject) JSONValue.parseWithException(UUIDJson);
-            return UUIDObject.get("id").toString();
-        } catch (IOException | ParseException e) {
-            e.printStackTrace();
-        }
+    public static CompletableFuture<String> getName(String uuid) {
 
-        return "invalid name";
-    }
+        CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
+            String url = "https://api.mojang.com/user/profiles/"+uuid.replace("-", "")+"/names";
+            try {
+                String nameJson = IOUtils.toString(new URL(url));
+                JSONArray nameValue = (JSONArray) JSONValue.parseWithException(nameJson);
+                String playerSlot = nameValue.get(nameValue.size()-1).toString();
+                JSONObject nameObject = (JSONObject) JSONValue.parseWithException(playerSlot);
+                return nameObject.get("name").toString();
+            } catch (IOException | ParseException e) {
+                e.printStackTrace();
+            }
+            return "invalid name";
+        });
+        future.thenAccept(s -> System.out.println("received: " + s));
+
+
+    return future;}
+
+    public static CompletableFuture<String> getUuid(String name) {
+
+        CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
+            String url = "https://api.mojang.com/users/profiles/minecraft/"+name;
+            try {
+                String UUIDJson = IOUtils.toString(new URL(url));
+                if(UUIDJson.isEmpty()) return "invalid name";
+                JSONObject UUIDObject = (JSONObject) JSONValue.parseWithException(UUIDJson);
+                return UUIDObject.get("id").toString();
+            } catch (IOException | ParseException e) {
+                e.printStackTrace();
+            }
+            return "invalid name";
+        });
+        future.thenAccept(s -> System.out.println("received: " + s));
+
+
+        return future;}
+
+
+
+
 
     public void unload(){
         friends.clear();
@@ -92,8 +111,6 @@ public class FriendManager {
     public void setFriends(ArrayList<FriendObj> friendObjArrayList){
         this.friends = friendObjArrayList;
     }
-
-
 
 
 }
