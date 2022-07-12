@@ -23,44 +23,46 @@ public class Del extends Command implements Wrapper {
 
         if (arguments.length() > 22) {
             //means its a uuid
-            if(friendManager.getName(arguments) == "invalid name"){
-                Logger.getLogger().printToChat("Player not found");
-                return;
-            }
-            boolean isfriended = Callisto.getCallisto().getFriendManager().isFriend(arguments);
+            FriendManager.getName(arguments).thenAccept(s->{
+                if(s.equals("invalid name")){
+                    Logger.getLogger().printToChat("Player not found");
+                }
+            });
+            boolean isfriended = friendManager.isFriend(arguments);
             if(!isfriended){
-                Logger.getLogger().printToChat(Callisto.getCallisto().getFriendManager().getName(arguments) + " is not your friend, LMAO");
+                Logger.getLogger().printToChat(friendManager.getName(arguments) + " is not your friend, LMAO");
                 return;
             }
 
-            // final FriendObj friend = new FriendObj(arguments);
             FriendObj friendObj = friendManager.getFriend(arguments);
 
             if(friendObj != null){
-                Callisto.getCallisto().getFriendManager().getFriends().remove(friendObj);
+                friendManager.getFriends().remove(friendObj);
             }
 
-            Logger.getLogger().printToChat("Removed: " + Callisto.getCallisto().getFriendManager().getName(arguments));
+            Logger.getLogger().printToChat("Removed: " + friendManager.getName(arguments));
         } else {
             //means its a playername
-            if(friendManager.getUuid(arguments) == "invalid name"){
-                Logger.getLogger().printToChat("Player not found");
-                return;
-            }
-            boolean isfriended = Callisto.getCallisto().getFriendManager().isFriend(friendManager.getUuid(arguments));
-            if(!isfriended){
-                Logger.getLogger().printToChat(arguments+ " is not your friend, LMAO");
-                return;
-            }
+            FriendManager.getUuid(arguments).thenAccept(s-> {
 
-            //final FriendObj friend = new FriendObj(Callisto.getCallisto().getFriendManager().getUuid(arguments));
-            FriendObj friendObj = friendManager.getFriend(friendManager.getUuid(arguments));
-            if(friendObj != null){
-                Callisto.getCallisto().getFriendManager().getFriends().remove(friendObj);
-            }
+                if (s.equals("invalid name")) {
+                    Logger.getLogger().printToChat("Player not found");
+                    return;
+                }
+                boolean isfriended = friendManager.isFriend(s);
+                if (!isfriended) {
+                    Logger.getLogger().printToChat(arguments + " is not your friend, LMAO");
+                    return;
+                }
+
+                FriendObj friendObj = friendManager.getFriend(s);
+                if (friendObj != null) {
+                    friendManager.getFriends().remove(friendObj);
+                }
 
 
-            Logger.getLogger().printToChat("Removed: " + arguments);
+                Logger.getLogger().printToChat("Removed: " + arguments);
+            });
         }
 
     }
